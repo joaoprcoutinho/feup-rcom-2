@@ -60,3 +60,29 @@ int createSocket() {
 
     return sockfd;
 }
+
+int resourceDownload(const int controlSocket, const int dataSocket, char *filename) {
+    char buf[1000];
+    FILE *fptr; 
+    fptr = fopen(filename, "wb");
+
+    if (fptr == NULL) {
+        perror("This file wasn't found\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int bytes_to_read = read(dataSocket, buf, 1000);
+
+    while (bytes_to_read > 0) {
+
+        if (fwrite(buf, bytes_to_read, 1, fptr) < 0) {
+            return -1;
+        }
+
+        bytes_to_read = read(dataSocket, buf, 1000);
+    }
+
+    fclose(fptr);
+
+    return getResponse(controlSocket, buf);
+}
