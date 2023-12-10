@@ -61,6 +61,10 @@ int createSocket() {
     return sockfd;
 }
 
+int fetchResource(const int socket, char *resource) {
+    return getResponse(socket, something);
+}
+
 int resourceDownload(const int controlSocket, const int dataSocket, char *filename) {
     char buf[1000];
     FILE *fptr; 
